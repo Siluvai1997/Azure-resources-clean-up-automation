@@ -1,0 +1,37 @@
+
+
+trigger: none
+parameters:
+  - name: environment
+    displayName: Target environment
+    type: string
+    default: test
+    values:
+      - test
+      - dev
+      - prod
+
+pool:
+  name: 'az-pool-set1'
+
+variables:
+   name: serviceConnection
+   value: scn-azure
+
+stages:
+- stage: Cleanup
+  displayName: Clean Azure Environment
+  jobs:
+  - job: RemoveResources
+    displayName: Remove resources in Azure subscriptions
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Run cleanup script'
+      env:
+        Environment: ${{ parameters.environment }}
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: ps
+        scriptLocation: 'scriptPath'
+        scriptPath: '$(Build.SourcesDirectory)/scripts/ResourceCleanup-Env-Azure.ps1'
+        failOnStandardError: true
