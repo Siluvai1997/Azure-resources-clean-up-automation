@@ -7,10 +7,6 @@ Write-Output "Running PowerShell Script..."
 # Get the Environment name
 $EnvironmentName = $env:Environment
 
-param(
-    [string]$EnvironmentName
-)
-
 # Ensure Az module is loaded
 if (-not (Get-Module -ListAvailable -Name Az)) {
     Write-OutPut "Az module not found. Please install Az.Accounts and related modules."
